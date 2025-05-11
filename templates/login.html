@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden p-8 mt-8">
+    <div class="text-center mb-8">
+        <h2 class="text-2xl font-bold text-gray-800">Login to Your Account</h2>
+        <p class="text-gray-600 mt-2">Enter your credentials to access the voting system</p>
+    </div>
+
+    <form id="loginForm" method="POST" action="{{ url_for('handle_login') }}">
+        <div class="mb-6">
+            <label for="username" class="block text-gray-700 text-sm font-bold mb-2">Username</label>
+            <input type="text" id="username" name="username" required
+                class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600">
+        </div>
+
+        <div class="mb-6">
+            <label for="password" class="block text-gray-700 text-sm font-bold mb-2">Password</label>
+            <input type="password" id="password" name="password" required
+                class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600">
+        </div>
+
+        <div class="mb-6">
+            <label for="role" class="block text-gray-700 text-sm font-bold mb-2">I am a:</label>
+            <select id="role" name="role" required
+                class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600">
+                <option value="">Select role</option>
+                <option value="candidate">Candidates</option>
+                <option value="voter">Voter</option>
+            </select>
+        </div>
+
+        <div class="text-center">
+            <button type="submit"
+                class="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700">Login</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden p-8 mt-8">
+    <div class="text-center mb-8">
+        <h2 class="text-2xl font-bold text-gray-800">Create an Account</h2>
+        <p class="text-gray-600 mt-2">Join our secure voting platform</p>
+    </div>
+
+    <form id="registerForm" method="POST" action="{{ url_for('handle_register') }}">
+        <div class="mb-4">
+            <label for="username" class="block text-gray-700 text-sm font-bold mb-2">Username</label>
+            <input type="text" id="username" name="username" required
+                class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600">
+        </div>
+
+        <div class="mb-4">
+            <label for="password" class="block text-gray-700 text-sm font-bold mb-2">Password</label>
+            <input type="password" id="password" name="password" required
+                class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600">
+        </div>
+
+        <div class="mb-4">
+            <label for="full_name" class="block text-gray-700 text-sm font-bold mb-2">Full Name</label>
+            <input type="text" id="full_name" name="full_name" required
+                class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600">
+        </div>
+
+        <div class="mb-4">
+            <label for="role" class="block text-gray-700 text-sm font-bold mb-2">Register as:</label>
+            <select id="role" name="role" required
+                class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600">
+                <option value="">Select role</option>
+                <option value="voter">Voter</option>
+                <option value="candidate">Candidate</option>
+            </select>
+        </div>
+
+        <div class="mb-6 hidden" id="party-field">
+            <label for="party" class="block text-gray-700 text-sm font-bold mb-2">Political Party</label>
+            <input type="text" id="party" name="party"
+                class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600">
+        </div>
+
+        <button type="submit" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300">
+            Register
+        </button>
+    </form>
+
+    <div class="mt-6 text-center">
+        <p class="text-gray-600">Already have an account? <a href="{{ url_for('login') }}" class="text-purple-600 hover:underline">Login here</a></p>
+    </div>
+</div>
+
+<script>
+    document.getElementById('role').addEventListener('change', function() {
+        const partyField = document.getElementById('party-field');
+        if (this.value === 'candidate') {
+            partyField.classList.remove('hidden');
+            document.getElementById('party').required = true;
+        } else {
+            partyField.classList.add('hidden');
+            document.getElementById('party').required = false;
+        }
+    });
+</script>
+{% endblock %}
