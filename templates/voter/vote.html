@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}Cast Your Vote{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6">Cast Your Vote</h2>
+
+    {% if voter_has_voted %}
+        <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-6 rounded">
+            <p>You have already voted. Each voter can only vote once.</p>
+        </div>
+        <a href="{{ url_for('voter_dashboard') }}" class="inline-block bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 px-4 rounded-lg transition duration-300">
+            Return to Dashboard
+        </a>
+    {% else %}
+        <div id="mining-animation" class="hidden bg-white rounded-xl shadow-md p-6 mb-6 text-center">
+            <div class="mb-4">
+                <i class="fas fa-hammer text-4xl text-purple-600 animate-bounce"></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-2">⛏️ Mining your vote (Proof of Work in progress)...</h3>
+            <div class="w-full bg-gray-200 rounded-full h-2.5 mb-4">
+                <div class="bg-purple-600 h-2.5 rounded-full mining-progress" style="width: 0%"></div>
+            </div>
+            <p id="mining-time" class="text-gray-600">This may take a few seconds...</p>
+        </div>
+
+        <div id="candidates-list" class="grid md:grid-cols-2 gap-6">
+            {% for candidate in candidates %}
+                <div class="bg-white rounded-xl shadow-md overflow-hidden card-hover transition duration-300">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-purple-100 p-3 rounded-full mr-4">
+                                <i class="fas fa-user-tie text-purple-600 text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-gray-800">{{ candidate.full_name }}</h3>
+                                <p class="text-gray-600">Party: {{ candidate.party }}</p>
+                            </div>
+                        </div>
+                        <form method="POST" action="{{ url_for('submit_vote') }}" onsubmit="showMiningAnimation(this)">
+                            <input type="hidden" name="candidate_username" value="{{ candidate.username }}">
+                            <button type="submit" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 px-4 rounded-lg transition duration-300">
+                                Vote for {{ candidate.full_name.split(' ')[0] }}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+
+<script>
+    function showMiningAnimation(form) {
+        document.getElementById('candidates-list').style.display = 'none';
+        document.getElementById('mining-animation').style.display = 'block';
+
+        const progressBar = document.querySelector('.mining-progress');
+        const miningTime = document.getElementById('mining-time');
+        const startTime = new Date().getTime();
+
+        // Simulate mining progress
+        let progress = 0;
+        const interval = setInterval(() => {
+            progress += Math.random() * 10;
+            if (progress > 100) progress = 100;
+            progressBar.style.width = `${progress}%`;
+
+            const elapsed = Math.floor((new Date().getTime() - startTime) / 1000);
+            miningTime.textContent = `Mining time: ${elapsed}s (Difficulty: 2 zeros)`;
+
+            if (progress >= 100) {
+                clearInterval(interval);
+                form.submit();
+            }
+        }, 300);
+    }
+</script>
+{% endblock %}
